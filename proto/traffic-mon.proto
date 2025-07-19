@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package traffic;
+
+option go_package = "./trafficmon";
+
+// Address structure as defined in your Go struct
+message UprobeAddressInfo {
+  uint32 family = 1;
+  uint32 saddr4 = 2;
+  uint32 daddr4 = 3;
+  bytes saddr6 = 4; // 16 bytes
+  bytes daddr6 = 5; // 16 bytes
+  uint32 sport = 6; // uint16 in Go, but uint32 here to avoid wire truncation
+  uint32 dport = 7; // same as above
+}
+
+// Represents the HTTP/2 frame header.
+message FrameHeader {
+  int32 length = 1;
+  string type = 2;
+  uint32 flags = 3;
+  uint32 stream_id = 4;
+}
+
+// Represents the decoded frame that has been reassembled.
+message DecodedFrame {
+  string connection_id = 1;
+  FrameHeader header = 2;
+  bytes payload = 3;
+  bool incomplete = 4;
+  string additional_info = 5;
+  bool is_gzip = 6;
+  string gzip_data = 7;
+}
+
+// Normalized address info
+message NormalizedAddrInfo {
+  string srcIP = 1;
+  string dstIP = 2;
+  int32  srcPort = 3;
+  int32  dstPort = 4;
+}
+
+// Event structure matching your uprobeGoTlsEvent
+message GoTlsEvent {
+  uint64 goid = 1;
+  uint64 ts_ns = 2;
+  uint32 fd = 3;
+  uint32 pid = 4;
+  uint32 tid = 5;
+  UprobeAddressInfo address_info = 6;
+  int32 data_len = 7;
+  uint32 event_type = 8;
+  string comm = 9; // Should be extracted from [16]int8
+  bytes data = 10; // event.Data[0:event.DataLen]
+  string uid = 11;
+  string node = 12;
+
+  NormalizedAddrInfo normalized_addr_info = 13;
+  string connection_id = 14;
+  repeated DecodedFrame frames = 15;
+}
+
+// Acknowledgement from the server
+message StreamResponse {
+  string status = 1;
+}
+
+// gRPC service definition for collector-to-hub streaming
+service TrafficCollector {
+  rpc StreamEvents(stream GoTlsEvent) returns (StreamResponse);
+}
