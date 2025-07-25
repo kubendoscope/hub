@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  PRIVATE_REPO: kubendocope/hub
+  PRIVATE_REPO: kubendoscope/hub
   IMAGE_NAME: hub
 
 jobs:
