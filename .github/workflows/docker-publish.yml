@@ -51,19 +51,14 @@ jobs:
       - name: Build Docker image
         run: |
           IMAGE1=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-          IMAGE2=ghcr.io/${{ github.repository }}
           VERSION=${{ steps.versioning.outputs.version }}
 
-          docker build -t $IMAGE1:$VERSION -t $IMAGE1:latest \
-                       -t $IMAGE2:$VERSION -t $IMAGE2:latest ./private-repo
+          docker build -t $IMAGE1:$VERSION -t $IMAGE1:latest ./private-repo
 
       - name: Push Docker images to GHCR ( Both organization and repo packages )
         run: |
           IMAGE1=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-          IMAGE2=ghcr.io/${{ github.repository }}
           VERSION=${{ steps.versioning.outputs.version }}
 
           docker push $IMAGE1:$VERSION
           docker push $IMAGE1:latest
-          docker push $IMAGE2:$VERSION
-          docker push $IMAGE2:latest
