@@ -14,6 +14,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o hub .
 
 # Stage 2: Run the Go app in Alpine
 FROM alpine:latest
+LABEL org.opencontainers.image.source=https://github.com/kubendoscope/hub
 
 # Copy from BUILDER
 COPY --from=builder /app/hub .
