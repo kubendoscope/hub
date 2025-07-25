@@ -28,7 +28,7 @@ jobs:
 
       - name: Clone private repository
         run: |
-          git clone https://${{ github.actor }}:${{ secrets.MY_PAT }}@github.com/${{ env.PRIVATE_REPO }} private-repo
+          git clone https://${{ github.actor }}:${{ secrets.PA_TOKEN }}@github.com/${{ env.PRIVATE_REPO }} private-repo
         shell: bash
 
       - name: Build Docker image
