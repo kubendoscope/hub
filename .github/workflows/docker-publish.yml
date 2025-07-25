@@ -60,7 +60,7 @@ jobs:
       - name: Push Docker images to GHCR ( Both organization and repo packages )
         run: |
           IMAGE1=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-          IMAGE2=ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}
+          IMAGE2=ghcr.io/${{ github.repository }}
           VERSION=${{ steps.versioning.outputs.version }}
 
           docker push $IMAGE1:$VERSION
