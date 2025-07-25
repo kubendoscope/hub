@@ -51,7 +51,7 @@ jobs:
       - name: Build Docker image
         run: |
           IMAGE1=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-          IMAGE2=ghcr.io/${{ github.repository }}/${{ env.IMAGE_NAME }}
+          IMAGE2=ghcr.io/${{ github.repository }}
           VERSION=${{ steps.versioning.outputs.version }}
 
           docker build -t $IMAGE1:$VERSION -t $IMAGE1:latest \
