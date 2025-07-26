@@ -9,7 +9,6 @@ on:
           default: ''
 
 env:
-  PRIVATE_REPO: kubendoscope/hub
   IMAGE_NAME: hub
 
 jobs:
@@ -31,11 +30,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.PA_TOKEN }}  # Replace with your actual secret name
 
-      - name: Clone private repository
-        run: |
-          git clone https://${{ github.actor }}:${{ secrets.PA_TOKEN }}@github.com/${{ env.PRIVATE_REPO }} private-repo
-        shell: bash
-
       - name: Set version tag
         id: versioning
         run: |
@@ -53,7 +47,7 @@ jobs:
           IMAGE1=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
           VERSION=${{ steps.versioning.outputs.version }}
 
-          docker build -t $IMAGE1:$VERSION -t $IMAGE1:latest ./private-repo
+          docker build -t $IMAGE1:$VERSION -t $IMAGE1:latest .
 
       - name: Push Docker images to GHCR ( Both organization and repo packages )
         run: |
