@@ -10,7 +10,7 @@ COPY . .
 RUN go mod tidy
 
 # Build binary
-RUN CGO_ENABLED=0 GOOS=linux go build -o hub .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-extldflags=-static" -o hub
 
 # Stage 2: Run the Go app in Alpine
 FROM alpine:latest
